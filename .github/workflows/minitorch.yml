@@ -1,0 +1,40 @@
+name: CI (Module 1)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -e .
+          pip install pytest hypothesis flake8 pep8-naming
+
+      - name: Lint with flake8
+        run: |
+          # если есть .flake8 в корне — flake8 прочитает правила из него
+          flake8 minitorch/ tests/ project/
+
+      - name: Run tests (Module 1 only)
+        run: |
+          echo "Module 1"
+          pytest -q -m task1_1
+          pytest -q -m task1_2
+          pytest -q -m task1_3
+          pytest -q -m task1_4
