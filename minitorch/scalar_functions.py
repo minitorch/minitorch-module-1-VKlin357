@@ -105,7 +105,7 @@ class Mul(ScalarFunction):
     def forward(ctx: Context, a: float, b: float) -> float:
         ctx.save_for_backward(a, b)
         return float(operators.mul(a, b))
-    
+
     @staticmethod
     def backward(ctx: Context, d_output: float) -> Tuple[float, float]:
         a, b = ctx.saved_values
